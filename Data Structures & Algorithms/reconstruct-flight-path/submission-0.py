@@ -1,0 +1,27 @@
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        adj = {src:[] for src, des in tickets}
+        tickets.sort()
+        for src, des in tickets:
+            adj[src].append(des)
+        
+        res = ["JFK"]
+        def dfs(src):
+            if len(res) == len(tickets) + 1:
+                return True
+            if src not in adj:
+                return False
+
+            temp = list(adj[src])
+            for i, des in enumerate(temp):
+                adj[src].pop(i)
+                res.append(des)
+                if dfs(des):
+                    return True
+                adj[src].insert(i, des)
+                res.pop()
+            
+            return False
+        
+        dfs("JFK")
+        return res
